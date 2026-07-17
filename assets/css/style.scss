@@ -1,0 +1,13 @@
+---
+---
+@import "{{ site.theme }}";
+
+/* Hide the sub-header description tag */
+header h2 {
+  display: none !important;
+}
+
+/* Hide the View on GitHub button */
+header .btn-github {
+  display: none !important;
+}
