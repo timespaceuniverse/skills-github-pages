@@ -5,8 +5,6 @@ title: Blogs on "aha!" moment
 
 # Blogs on "Aha!" moments
 
-Insights with simplification.
-
 ## Recent Posts
 <ul>
   {% for post in site.posts %}
