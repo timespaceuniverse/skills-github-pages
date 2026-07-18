@@ -75,11 +75,109 @@ layout: post
 title: "A Rigorous Mathematical Formulation of PBD and XPBD"
 mathjax: true
 ---
+# A Rigorous Mathematical Formulation of Position-Based Dynamics (PBD) and Extended PBD (XPBD)
+
+## 1. Introduction
+This document presents a structured, mathematically transparent derivation of Position-Based Dynamics (PBD) and Extended Position-Based Dynamics (XPBD). Grounded in Newtonian mechanics, these frameworks establish a unified particle-based representation capable of simulating macro-scale physical entities, including rigid bodies, soft bodies, and fluids. Beyond traditional computer graphics animations, the algorithmic robustness of the XPBD framework positions it as a foundational inductive bias for physics-informed artificial intelligence and the construction of predictive world models. 
+
+While the original literature introduces algebraic complexities that mask the underlying intuition, this text delivers a clear, step-by-step mathematical deduction.
+
+* **Primary References:**
+  * Müller et al., [Position-Based Dynamics (2007)](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf)
+  * Macklin et al., [XPBD: Extended Position-Based Dynamics (2016)](https://matthias-research.github.io/pages/publications/XPBD.pdf)
+
+---
+
+## 2. Kinematic Foundations & Force Classification
+Consider a discrete dynamical system consisting of $n$ particles. Each particle $i$ is parameterized by its position $\mathbf{x}_i \in \mathbb{R}^3$ and elemental mass $m_i$. Let $\mathbf{M}$ denote the diagonal mass matrix. Under a standard discrete-time Newtonian formulation with a temporal step size $\Delta t$, the position update vector $\Delta \mathbf{x}$ maps directly to the generalized forces acting on the system:
+
+$$\Delta \mathbf{x} = \Delta t \, \mathbf{v} = \Delta t^2 \mathbf{M}^{-1} \mathbf{F}$$
+
+In a discrete computer simulation environment, variables such as $\Delta t$ and $\mathbf{M}$ are static and known. However, the generalized forces $\mathbf{F}$ must be resolved. We decompose $\mathbf{F}$ into two orthogonal categories:
+1. **External (Active) Forces ($\mathbf{F}_{ext}$):** Directly defined user or environmental inputs (e.g., gravity, manual perturbations).
+2. **Internal (Inactive/Constraint) Forces ($\mathbf{F}_{int}$):** Restoring forces that preserve structural topology. Instead of defining these forces explicitly via stiff, numerically volatile differential equations, they are implicitly deduced from a system of geometric constraints.
+
+---
+
+## 3. Geometric Constraints & Structural Representation
+Internal mechanics are governed by a set of $m$ scalar constraint functions:
+
+$$C_j(\mathbf{x}) : \mathbb{R}^{3n} \rightarrow \mathbb{R}, \quad j \in \{1, \dots, m\}$$
+
+The system achieves equilibrium when all constraints are satisfied, such that $C_j(\mathbf{x}) = 0$. 
+
+### Example: One-Dimensional Distance Constraint
+For a minimal two-particle system with coordinates $\mathbf{x}_1, \mathbf{x}_2$ and a target rest length $L$, the distance constraint is expressed as:
+
+$$C(\mathbf{x}_1, \mathbf{x}_2) = \|\mathbf{x}_1 - \mathbf{x}_2\| - L$$
+
+* $C(\mathbf{x}) < 0 \implies$ Compression regime.
+* $C(\mathbf{x}) > 0 \implies$ Tension regime.
+* $C(\mathbf{x}) = 0 \implies$ Equilibrium state.
+
+By coupling particles globally via localized distance networks, complex macroscopic structures like deformable soft bodies can be represented seamlessly.
+
+---
+
+## 4. Constraint-Force Derivation via Hooke's Law
+To drive a deformed system at state $\mathbf{x}$ back to its equilibrium manifold ($C(\mathbf{x} + \Delta \mathbf{x}) = 0$), we introduce an internal generalized constraint force vector along the constraint gradient, scaled by a scalar magnitude $\lambda_{force}$. Analogous to a generalized continuous Hooke's law:
+
+$$C(\mathbf{x} + \Delta \mathbf{x}) = -\frac{1}{k} \lambda_{force}$$
+
+where $k$ represents physical stiffness, and the negative sign denotes its restoring characteristic. 
+
+Applying a first-order Taylor expansion to the left-hand side yields:
+
+$$C(\mathbf{x}) + \nabla C(\mathbf{x})^T \Delta \mathbf{x} = -\frac{1}{k} \lambda_{force}$$
+
+The displacement $\Delta \mathbf{x}$ induced by the constraint force over time step $\Delta t$ is defined as:
+
+$$\Delta \mathbf{x} = \mathbf{M}^{-1} \nabla C(\mathbf{x}) \lambda_{force} \Delta t^2$$
+
+Substituting this displacement equation back into the Taylor expansion results in:
+
+$$C(\mathbf{x}) + \nabla C(\mathbf{x})^T \left( \mathbf{M}^{-1} \nabla C(\mathbf{x}) \lambda_{force} \Delta t^2 \right) = -\frac{1}{k} \lambda_{force}$$
+
+### XPBD Parameter Scaling
+To eliminate time-step dependencies, XPBD re-parameterizes the stiffness $k$ and force magnitude $\lambda_{force}$. We define the total Lagrange multiplier $\lambda$ and compliance $\alpha, \tilde{\alpha}$ as:
+
+$$\lambda = \lambda_{force} \Delta t^2, \quad \alpha = \frac{1}{k}, \quad \tilde{\alpha} = \frac{\alpha}{\Delta t^2} = \frac{1}{k \Delta t^2}$$
+
+Multiplying the right side by $\frac{\Delta t^2}{\Delta t^2}$ yields:
+
+$$C(\mathbf{x}) + \nabla C(\mathbf{x})^T \left( \mathbf{M}^{-1} \nabla C(\mathbf{x}) \lambda \right) = -\left(\frac{1}{k \Delta t^2}\right) (\lambda_{force} \Delta t^2)$$
+
+This simplifies to the fundamental continuous XPBD constraint equation:
+
+$$C(\mathbf{x}) + \nabla C(\mathbf{x})^T \mathbf{M}^{-1} \nabla C(\mathbf{x}) \lambda = -\tilde{\alpha} \lambda$$
+
+---
+
+## 5. Iterative Solver & Localized Update Rules
+In practical computer simulations, constraints are solved sequentially in an inner loop across $K$ sub-steps. Let $k$ denote the current sub-step index within the solver sequence. Position adjustments $\Delta \mathbf{x}$ are determined by solving individual constraints $C_j(\mathbf{x})$ one by one. After computing the base displacement, an incremental "small delta" change for the Lagrange multiplier ($\delta \lambda$) is calculated to advance to the next step.
+
+For sub-step $k$, the constraint evaluation under a structural correction satisfies:
+
+$$C(\mathbf{x}_k + \Delta \mathbf{x}) = C(\mathbf{x}_k) + \nabla C(\mathbf{x}_k)^T \left( \mathbf{M}^{-1} \nabla C(\mathbf{x}_k) \lambda_k \Delta t^2 \right)$$
+
+Solving for $\lambda_k$ and $\Delta \mathbf{x}$ yields the advanced intermediate position state:
+
+$$\mathbf{x}_{k+1} = \mathbf{x}_k + \Delta \mathbf{x}$$
+
+For the subsequent sub-step $k+1$, introducing a small incremental position change $\delta \mathbf{x}$ alongside its corresponding incremental multiplier update $\delta \lambda$ yields:
+
+$$C(\mathbf{x}_k + \Delta \mathbf{x} + \delta \mathbf{x}) = C(\mathbf{x}_k) + \nabla C(\mathbf{x}_k)^T \left( \mathbf{M}^{-1} \nabla C(\mathbf{x}_k) (\lambda_k + \delta \lambda) \Delta t^2 \right)$$
+
+$$= C(\mathbf{x}_{k+1}) + \nabla C(\mathbf{x}_k)^T \left( \mathbf{M}^{-1} \nabla C(\mathbf{x}_k) \delta \lambda \Delta t^2 \right) = -\alpha (\lambda_k + \delta \lambda) \Delta t^2$$
+
+> **Computational Note:** For optimized runtime efficiency, it is standard practice to assume that the constraint gradient is invariant across localized updates ($\nabla C(\mathbf{x}_k) \approx \nabla C(\mathbf{x}_{k+1})$), or to stick strictly to the initial configuration state $\nabla C(\mathbf{x}_0)$.
+
+Given that $\mathbf{M}^{-1}$ is a diagonal matrix, we absorb the $\Delta t^2$ factor into our normalized compliance parameter ($\tilde{\alpha} = \frac{\alpha}{\Delta t^2}$) to match original literature conventions. Isolating the small incremental multiplier $\delta \lambda$ from the matching sides of the final equations reveals the definitive XPBD system update rule:
+
+$$\delta \lambda = \frac{-C(\mathbf{x}_{k+1}) - \lambda_k \tilde{\alpha}}{\nabla C(\mathbf{x}_k)^T \mathbf{M}^{-1} \nabla C(\mathbf{x}_k) + \tilde{\alpha}}$$
 
 
-## 1. Fundamentals of Particle Dynamics and Constraints
 
-Consider a system composed of $n$ particles. Each particle $i$ is characterized by its position $\mathbf{x}_i \in \mathbb{R}^3$ and its mass $m_i \in \mathbb{R}$. Let $\mathbf{x} = [\mathbf{x}_1^T, \mathbf{x}_2^T, \dots, \mathbf{x}_n^T]^T \in \mathbb{R}^{3n}$ denote the generalized system coordinate vector. 
 
-From Newton's second law of motion, the relationship governing the incremental displacement $\Delta \mathbf{x}$ over a discrete time step $\Delta t$ is expressed as:
-$$\Delta \mathbf{x} = \Delta t \mathbf{v} = \Delta t^2 \mathbf{M}^{-1} \mathbf{F}$$
+
+
