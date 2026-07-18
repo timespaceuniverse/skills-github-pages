@@ -75,7 +75,6 @@ layout: post
 title: "A Rigorous Mathematical Formulation of PBD and XPBD"
 ---
 
-
 # A Rigorous Mathematical Formulation of Position-Based Dynamics (PBD) and Extended PBD (XPBD)
 
 ## 1. Introduction
@@ -96,7 +95,7 @@ $$
 \Delta \mathbf{x} = \Delta t \, \mathbf{v} = \Delta t^2 \mathbf{M}^{-1} \mathbf{F}
 $$
 
-In a discrete computer simulation environment, variables such as $\Delta t and \mathbf{M}$ are static and known. However, the generalized forces $\mathbf{F}$ must be resolved. We decompose $\mathbf{F}$ into two orthogonal categories:
+In a discrete computer simulation environment, variables such as $\Delta t$ and $\mathbf{M}$ are static and known. However, the generalized forces $\mathbf{F}$ must be resolved. We decompose $\mathbf{F}$ into two orthogonal categories:
 1. **External (Active) Forces ($\mathbf{F}_{ext}$):** Directly defined user or environmental inputs (e.g., gravity, manual perturbations).
 2. **Internal (Inactive/Constraint) Forces ($\mathbf{F}_{int}$):** Restoring forces that preserve structural topology. Instead of defining these forces explicitly via stiff, numerically volatile differential equations, they are implicitly deduced from a system of geometric constraints.
 
@@ -175,7 +174,7 @@ $$
 ---
 
 ## 5. Iterative Solver & Localized Update Rules
-In practical computer simulations, constraints are solved sequentially in an inner loop across $K$ sub-steps. Let $k$ denote the current sub-step index within the solver sequence. Position adjustments $\Delta \mathbf{x}$ are determined by solving individual constraints $C_j(\mathbf{x})$ one by one. After computing the base displacement, an incremental "small delta" change for the Lagrange multiplier ($\delta \lambda$) is calculated to advance to the next step.
+In practical computer simulations, constraints are solved sequentially in an inner loop across $K$ sub-steps. Let $k$ denote the current sub-step index within the solver sequence. Position adjustments $\Delta \mathbf{x}$ are determined by solving individual constraints $C_j(\mathbf{x}) one by one. After computing the base displacement, an incremental "small delta" change for the Lagrange multiplier ($\delta \lambda$) is calculated to advance to the next step.
 
 For sub-step $k$, the constraint evaluation under a structural correction satisfies:
 
@@ -206,4 +205,3 @@ Given that $\mathbf{M}^{-1}$ is a diagonal matrix, we absorb the $\Delta t^2$ fa
 $$
 \delta \lambda = \frac{-C(\mathbf{x}_{k+1}) - \lambda_k \tilde{\alpha}}{\nabla C(\mathbf{x}_k)^T \mathbf{M}^{-1} \nabla C(\mathbf{x}_k) + \tilde{\alpha}}
 $$
-
