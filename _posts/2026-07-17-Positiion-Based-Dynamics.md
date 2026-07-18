@@ -75,7 +75,11 @@ layout: post
 title: "A Rigorous Mathematical Formulation of PBD and XPBD"
 mathjax: true
 ---
- 
-$$
-\Delta \mathbf{x} = \Delta t \, \mathbf{v} = \Delta t^2 \mathbf{M}^{-1} \mathbf{F}
-$$
+
+
+## 1. Fundamentals of Particle Dynamics and Constraints
+
+Consider a system composed of $n$ particles. Each particle $i$ is characterized by its position $\mathbf{x}_i \in \mathbb{R}^3$ and its mass $m_i \in \mathbb{R}$. Let $\mathbf{x} = [\mathbf{x}_1^T, \mathbf{x}_2^T, \dots, \mathbf{x}_n^T]^T \in \mathbb{R}^{3n}$ denote the generalized system coordinate vector. 
+
+From Newton's second law of motion, the relationship governing the incremental displacement $\Delta \mathbf{x}$ over a discrete time step $\Delta t$ is expressed as:
+$$\Delta \mathbf{x} = \Delta t \mathbf{v} = \Delta t^2 \mathbf{M}^{-1} \mathbf{F}$$
