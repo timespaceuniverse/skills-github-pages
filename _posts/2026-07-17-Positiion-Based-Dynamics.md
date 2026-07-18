@@ -1,3 +1,9 @@
+---
+layout: post
+title: "A Rigorous Mathematical Formulation of PBD and XPBD"
+mathjax: true
+---
+
 <!-- raw before LLM format , lazy work
 
 We give a much more logic clear way to represent the math of PBD and XPBD in this blog.
@@ -70,11 +76,7 @@ M^-1 is just a diagnal matrix , redefine the variables with delta t ^2 abbsorbed
 small delta Lambda  =  (-C(Xk+1)-Lambda k * ~alpha)/( Transpose ( Gradient C(Xk)) * M^-1 *Gradient C(Xk) + ~alpha)
 
 --> 
----
-layout: post
-title: "A Rigorous Mathematical Formulation of PBD and XPBD"
-mathjax: true
----
+
 # A Rigorous Mathematical Formulation of Position-Based Dynamics (PBD) and Extended PBD (XPBD)
 
 ## 1. Introduction
