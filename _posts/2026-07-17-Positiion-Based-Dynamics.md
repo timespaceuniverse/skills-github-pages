@@ -1,9 +1,9 @@
 ---
 layout: post
-title: 'A Rigorous Mathematical Formulation of PBD and XPBD'
+title: 'A Rigorous Mathematical Formulation of Position-Based Dynamics (PBD) and Extended PBD (XPBD)'
 mathjax: true
+by: 'helloworld1934'
 ---
-
 
 <!-- raw before LLM format , lazy work
 
@@ -77,9 +77,6 @@ M^-1 is just a diagnal matrix , redefine the variables with delta t ^2 abbsorbed
 small delta Lambda  =  (-C(Xk+1)-Lambda k * ~alpha)/( Transpose ( Gradient C(Xk)) * M^-1 *Gradient C(Xk) + ~alpha)
 
 --> 
-
-# A Rigorous Mathematical Formulation of Position-Based Dynamics (PBD) and Extended PBD (XPBD)
-
 ## 1. Introduction
 This document presents a structured, mathematically transparent derivation of Position-Based Dynamics (PBD) and Extended Position-Based Dynamics (XPBD). Grounded in Newtonian mechanics, these frameworks establish a unified particle-based representation capable of simulating macro-scale physical entities, including rigid bodies, soft bodies, and fluids. Beyond traditional computer graphics animations, the algorithmic robustness of the XPBD framework positions it as a foundational inductive bias for physics-informed artificial intelligence and the construction of predictive world models. 
 
@@ -173,7 +170,7 @@ $$C(\mathbf{x}_k + \Delta \mathbf{x} + \delta \mathbf{x}) = C(\mathbf{x}_k) + \n
 
 $$= C(\mathbf{x}_{k+1}) + \nabla C(\mathbf{x}_k)^T \left( \mathbf{M}^{-1} \nabla C(\mathbf{x}_k) \delta \lambda \Delta t^2 \right) = -\alpha (\lambda_k + \delta \lambda) \Delta t^2$$
 
-> **Computational Note:** For optimized runtime efficiency, it is standard practice to assume that the constraint gradient is invariant across localized updates ($\nabla C(\mathbf{x}_k) \approx \nabla C(\mathbf{x}_{k+1})$), or to stick strictly to the initial configuration state $\nabla C(\mathbf{x}_0)$.
+> **Computational Note:** For optimized runtime efficiency, it is standard practice to assume that the constraint gradient is invariant across localized updates ($$\nabla C(\mathbf{x}_k) \approx \nabla C(\mathbf{x}_{k+1})$$), or to stick strictly to the initial configuration state $$\nabla C(\mathbf{x}_0)$$.
 
 Given that $\mathbf{M}^{-1}$ is a diagonal matrix, we absorb the $\Delta t^2$ factor into our normalized compliance parameter ($\tilde{\alpha} = \frac{\alpha}{\Delta t^2}$) to match original literature conventions. Isolating the small incremental multiplier $\delta \lambda$ from the matching sides of the final equations reveals the definitive XPBD system update rule:
 
