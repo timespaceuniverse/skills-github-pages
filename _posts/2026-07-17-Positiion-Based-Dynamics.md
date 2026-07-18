@@ -1,8 +1,9 @@
 ---
 layout: post
-title: "A Rigorous Mathematical Formulation of PBD and XPBD"
+title: 'A Rigorous Mathematical Formulation of PBD and XPBD'
 mathjax: true
 ---
+
 
 <!-- raw before LLM format , lazy work
 
