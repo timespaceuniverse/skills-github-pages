@@ -73,6 +73,7 @@ small delta Lambda  =  (-C(Xk+1)-Lambda k * ~alpha)/( Transpose ( Gradient C(Xk)
 ---
 layout: post
 title: "A Rigorous Mathematical Formulation of PBD and XPBD"
+mathjax: true
 ---
 
 # A Rigorous Mathematical Formulation of Position-Based Dynamics (PBD) and Extended PBD (XPBD)
