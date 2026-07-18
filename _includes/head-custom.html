@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <!-- Force GitHub GFM and MathJax Styles -->
-  <link rel="stylesheet" href="https://cloudflare.com">
-  <script src="https://polyfill.io"></script>
-  <script id="MathJax-script" async src="https://cloudflare.com/"></script>
-</head>
-<body class="markdown-body">
-  <!-- Paste Raw Markdown Text Directly Here -->
-</body>
-</html>
+<!-- Configure MathJax Options Before Loading the Script -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<!-- Load MathJax from UNPKG CDN Mirror -->
+<script id="MathJax-script" async src="https://unpkg.com"></script>
