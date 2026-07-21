@@ -191,6 +191,9 @@ The new position $\mathbf{X}_{i\_\text{new}}$ after moving may be at chaotic pla
 
 Intuitively, $\mathbf{T}$ is a 3D vector which is easy to get from the new center of mass $\mathbf{X}_{c\_\text{new}} = \frac{\sum \mathbf{X}_{i\_\text{new}} m_i}{\sum m_i}$:
 
+
+
+
 $$\mathbf{T} = \mathbf{X}_{c\_\text{new}} - \mathbf{X}_{c\_\text{rest}}$$
 
 Intuitively, we define the loss function as:
