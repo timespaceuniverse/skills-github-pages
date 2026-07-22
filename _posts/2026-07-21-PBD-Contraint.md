@@ -292,7 +292,8 @@ $$
 \mathbf{x}_{i}^{\mathrm{target}} = R\,(\mathbf{x}_{i}^{\mathrm{rest}} - \mathbf{x}_{c}^{\mathrm{rest}}) + \mathbf{x}_{c}^{\mathrm{rest}} + \mathbf{t}
 $$
 
-The task is to find the optimal $R$ and $\mathbf{t}$ given the new positions $\mathbf{x}_i$ and then to move each particle toward its target $\mathbf{x}_{i}^{\mathrm{target}}$.
+The task is to find the optimal $R$ and $\mathbf{t}$ given the new positions $\mathbf{x}_i$, and then to move each particle toward its target $\mathbf{x}_i^{\mathrm{target}}$.
+
 
 ### 3.2 Optimal Translation
 
